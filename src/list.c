@@ -26,7 +26,7 @@ size_t list_size(List* l) {
 }
 
 int list_get(List* l, size_t pos, int* value) {
-    if (l->mask[pos-1] && pos <= l->size) {
+    if (l->mask[pos-1] && pos <= l->size && pos > 0) {
         *value = l->list[pos-1];
         return 0;
     }
@@ -35,7 +35,7 @@ int list_get(List* l, size_t pos, int* value) {
 }
 
 int list_set(List* l, size_t pos, int value) {
-    if (l->mask[pos-1] && pos <= l->size) {
+    if (l->mask[pos-1] && pos <= l->size && pos > 0) {
         l->list[pos-1] = value;
         return 0;
     }
@@ -44,7 +44,7 @@ int list_set(List* l, size_t pos, int value) {
 }
 
 int list_insert(List* l, size_t pos, int value) {
-    if (!l->mask[pos-1] && pos <= l->size) {
+    if (!l->mask[pos-1] && pos <= l->size && pos > 0) {
         l->list[pos-1] = value;
         l->mask[pos-1] = true;
         l->used++;
@@ -56,7 +56,7 @@ int list_insert(List* l, size_t pos, int value) {
 }
 
 int list_remove(List* l, size_t pos) {
-    if (l->mask[pos-1] && pos <= l->size) {
+    if (l->mask[pos-1] && pos <= l->size && pos > 0) {
         l->list[pos-1] = 0;
         l->mask[pos-1] = false;
         l->used--;
