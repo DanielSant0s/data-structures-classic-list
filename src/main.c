@@ -13,6 +13,8 @@ void display_list(List* l) {
     for (int i = 1; i <= list_size(l); i++) {
         if (list_get(l, i, &value) == 0) {
             printf("%d,", value);
+        } else {
+            printf("empty,");
         }
     }
     printf("]\n");
@@ -20,12 +22,15 @@ void display_list(List* l) {
 
 void fill_with_random(List* l, int min, int max) {
     for (int i = 1; i <= list_size(l); i++) {
-        list_insert(l, i, randint(min, max));
+        if (list_insert(l, i, randint(min, max)) == 0) {
+            printf("Item adicionado na posicao %d.\n", i);
+        }
     }
 }
 
 int main(int argc, char *argv[]) {
     List l;
+    int randpos, try_randpos;
     
     srand(time(NULL)); // for random int generation.
     setlocale(LC_ALL,"Portuguese");
@@ -48,6 +53,46 @@ int main(int argc, char *argv[]) {
 
     display_list(&l);
 
+    // Now we can focus on more complex tests, so let's try some brute force list manipulation to see what we can get.
+
+    printf("\nTest: Unload 50 random slots, and insert 44556677 if the code try to remove an already unloaded slot.\n");
+    printf("\nTesting 'randomness' with list slots...\n");
+    for (int i = 0; i < 50; i++) {
+        randpos = randint(0, list_size(&l));
+        if (list_remove(&l, randpos) < 0) {
+            list_insert(&l, randpos, 44556677); // Insert 44556677 if the code tries to remove an already removed slot.
+        }
+    }
+
+    display_list(&l);
+
+    printf("\nTest: Unloading 100 random slots and trying to insert randomly too, if it fails, set value to -500.\n");
+    printf("\nTesting 'error catching' with list slots...\n");
+    for (int i = 0; i < 100; i++) {
+        randpos = randint(0, list_size(&l));
+        if (list_remove(&l, randpos) < 0) {
+            try_randpos = randpos;
+            while (randpos == try_randpos) {
+                try_randpos = randint(0, list_size(&l));
+                if (list_remove(&l, try_randpos) < 0) {
+                    try_randpos = randpos;
+                }
+            }
+        }
+    }
+
+    display_list(&l);
+
+    printf("\nInseting 500 on unloaded slots, if it fails, set value to -500....\n");
+
+    for (int i = 1; i <= list_size(&l); i++) {
+        if (list_insert(&l, i, 500) < 0) {
+            list_set(&l, i, -500);
+        }
+    }
+    display_list(&l);
+
+    list_destroy(&l);
 
     return 0;
 }

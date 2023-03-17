@@ -12,6 +12,7 @@ typedef struct {
 } List;
 
 List list_create(size_t len);
+void list_destroy(List* l);
 bool list_empty(List* l);
 bool list_full(List* l);
 size_t list_size(List* l);

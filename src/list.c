@@ -13,6 +13,13 @@ List list_create(size_t len) {
     return l;
 }
 
+void list_destroy(List* l) {
+    free(l->list);
+    free(l->mask);
+    l->used = 0;
+    l->size = 0;
+}
+
 bool list_empty(List* l) {
     return (l->used == 0);
 }
@@ -44,7 +51,7 @@ int list_set(List* l, size_t pos, int value) {
 }
 
 int list_insert(List* l, size_t pos, int value) {
-    if (!l->mask[pos-1] && pos <= l->size && pos > 0) {
+    if (l->mask[pos-1] == false && pos <= l->size && pos > 0) {
         l->list[pos-1] = value;
         l->mask[pos-1] = true;
         l->used++;
