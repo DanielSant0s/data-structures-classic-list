@@ -56,7 +56,7 @@ int list_insert(List* l, size_t pos, int value) {
 }
 
 int list_remove(List* l, size_t pos) {
-    if (!l->mask[pos-1] && pos <= l->size) {
+    if (l->mask[pos-1] && pos <= l->size) {
         l->list[pos-1] = 0;
         l->mask[pos-1] = false;
         l->used--;
