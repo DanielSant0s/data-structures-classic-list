@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 
     display_list(&l);
 
-    printf("\nInseting 500 on unloaded slots, if it fails, set value to -500....\n");
+    printf("\nInserting 500 on unloaded slots, if it fails, set value to -500....\n");
 
     for (int i = 1; i <= list_size(&l); i++) {
         if (list_insert(&l, i, 500) < 0) {
